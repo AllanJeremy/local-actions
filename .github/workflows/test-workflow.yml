@@ -1,0 +1,31 @@
+name: retry benchmarks
+
+on:
+  push:
+    branches:
+      - feat/repeat-benchmark
+
+jobs:
+  repeat:
+    name: Repeat benchmark
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Do something cool
+        run: |
+          echo "Hellooooooooo, anyone there?"
+
+      - name: Retry Step
+        uses: nick-fields/retry@v2.7.0
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_seconds: 5
+          command: |
+            echo "Running action that fails..."
+            exit 1
